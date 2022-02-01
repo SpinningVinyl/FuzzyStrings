@@ -1,5 +1,3 @@
-#+TITLE: FuzzyStrings README
-
 * FuzzyStrings
 
 A small Java package for simple string matching.

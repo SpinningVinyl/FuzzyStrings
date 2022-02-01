@@ -1,0 +1,169 @@
+#+TITLE: FuzzyStrings README
+
+* FuzzyStrings
+
+A small Java package for simple string matching.
+
+** Documentation
+
+*** Private methods
+
+**** levenshtein()
+
+#+begin_src java
+private static int levenshtein(String s1, String s2)
+#+end_src
+
+Returns the [[https://en.wikipedia.org/wiki/Levenshtein_distance][Levenshtein distance]] between strings =s1= and =s2=.
+
+**** levenshteinToken()
+
+#+begin_src java
+private static int levenshteinToken(String[] tokens1, String[] tokens2)
+#+end_src
+
+Similar to =levenshtein()=, but based on /tokens/ instead of individual characters. A token is an uninterrupted sequence of word characters (=\w= in regex parlance).
+
+*** Public methods
+
+**** ratio()
+
+#+begin_src java
+public static int ratio(String s1, String s2, boolean ignoreCase)
+#+end_src
+
+Returns similarity between =s1= and =s2= based on their Levenshtein distance. If =ignoreCase= is =true=, the comparison will be case-insensitive.
+
+**** ratioToken()
+
+#+begin_src java
+public static int ratioToken(String s1, String s2, boolean ignoreCase)
+#+end_src
+
+Returns similarity between =s1= and =s2= based on =levenshteinToken()=. Returns -1 if both =s1= and =s2= do not contain any tokens.
+
+**** ratioTokenSet()
+
+#+begin_src java
+public static int ratioTokenSet(String s1, String s2, boolean ignoreCase)
+#+end_src
+
+This method treats =s1= and =s2= as sets of tokens and returns their similarity based on the difference between those two sets. Returns -1 if both =s1= and =s2= do not contain any tokens.
+
+Example:
+
+#+begin_src java
+int score = FuzzyStrings.ratioTokenSet("It is a beautiful day", "A beautiful day it is", true);
+System.out.println(score); // 100
+#+end_src
+
+**** complexRatio()
+
+#+begin_src java
+public static int complexRatio(String s1, String s2, boolean ignoreCase)
+#+end_src
+
+Returns similarity between =s1= and =s2= based on =ratio()=, =ratioToken()= and =ratioTokenSet()=.
+
+**** matchOne()
+
+#+begin_src java
+public static StringMatch matchOne(String s, Collection<String> candidates,
+                                       StringCompareFunction compareFunction, boolean ignoreCase)
+#+end_src
+
+Compares all strings in =candidates= to =s= and returns the best match.
+
+=FuzzyStrings::ratio=, =FuzzyStrings::ratioToken=, =FuzzyStrings::ratioTokenSet= and =FuzzyStrings::complexRatio= can be used as =compareFunction=.
+
+Example:
+
+#+begin_src java
+String s = "this is a test";
+List<String> candidates = new ArrayList<>();
+candidates.add("this is a pest");
+candidates.add("not a match at all");
+candidates.add("this is a bird's nest");
+candidates.add("this is a test test");
+candidates.add("this is a test!");
+candidates.add("this is a Test");
+candidates.add("this is a quick test");
+StringMatch m = FuzzyStrings.matchOne(s, candidates, FuzzyStrings::complexRatio, true);
+System.out.println(m.getScore() + ": " + m.getText()); // 100: this is a Test
+#+end_src
+
+**** matchAndSort()
+
+#+begin_src java
+public static List<StringMatch> matchAndSort(String s, Collection<String> candidates,
+                                                 StringCompareFunction compareFunction, boolean ignoreCase) 
+#+end_src
+
+Compares all strings in =candidates= to =s= and returns matches sorted by score (in descending order).
+
+=FuzzyStrings::ratio=, =FuzzyStrings::ratioToken=, =FuzzyStrings::ratioTokenSet= and =FuzzyStrings::complexRatio= can be used as =compareFunction=.
+
+Example:
+
+#+begin_src java
+String s = "this is a test";
+List<String> candidates = new ArrayList<>();
+candidates.add("this is a pest");
+candidates.add("not a match at all");
+candidates.add("this is a bird's nest");
+candidates.add("this is a test test");
+candidates.add("this is a test!");
+candidates.add("this is a Test");
+candidates.add("this is a quick test");
+List<StringMatch> results = FuzzyStrings.matchAndSort(s, candidates, FuzzyStrings::complexRatio, false);
+for (StringMatch m : results) {
+    System.out.println(m.getScore() + ": " + m.getText());
+}
+#+end_src
+
+Output:
+
+#+begin_example
+99: this is a test!
+91: this is a test test
+87: this is a quick test
+86: this is a pest
+86: this is a Test
+69: this is a bird's nest
+40: not a match at all
+#+end_example
+
+*** Helper class -- StringMatch
+
+#+begin_src java
+public class StringMatch implements Comparable<StringMatch>
+#+end_src
+
+This class implements a string match. It contains both the text that has been matched and its /score/. The score shows how similar the text is to the string it has been compared to.
+
+To get the text, use the =getText()= method:
+
+#+begin_src java
+StringMatch match = FuzzyStrings.matchOne(s, candidates, FuzzyStrings::complexRatio, false);
+String matchedString = match.getText();
+#+end_src
+
+Similarly, to get the score, use the =getScore()= method:
+
+#+begin_src java
+int score = match.getScore();
+#+end_src
+
+*** Functional interface -- StringCompareFunction
+
+#+begin_src java
+@FunctionalInterface
+public interface StringCompareFunction {
+    int compare(String s1, String s2, boolean ignoreCase);
+}
+#+end_src
+
+
+** License
+
+This project is licensed under the terms of GNU LGPL 2.0. See =LICENSE= for details.

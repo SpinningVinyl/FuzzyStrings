@@ -1,11 +1,10 @@
 /*
-
-This program is free software licensed under the terms of GNU LGPL 2.0.
+Copyright 2021-2023 Pavel Urusov
+This file is free software licensed under the terms of the MIT license.
 See LICENSE for details.
-
  */
 
-package com.pavelurusov.fuzzystrings;
+package net.prsv.fuzzystrings;
 
 import java.util.*;
 import java.util.regex.Pattern;

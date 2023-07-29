@@ -1,4 +1,4 @@
-package com.pavelurusov.fuzzystrings;
+package net.prsv.fuzzystrings;
 
 import java.util.ArrayList;
 import java.util.List;

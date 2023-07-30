@@ -1,6 +1,6 @@
 * FuzzyStrings
 
-A small Java package for simple string matching. It was born when I needed something similar to [The Fuzz](https://github.com/seatgeek/thefuzz), but for Java.
+A small Java package for simple string matching. It was born when I needed something similar to [[The Fuzz][https://github.com/seatgeek/thefuzz]], but for Java.
 
 In my testing, the results it produces are extremely similar to results produced by The Fuzz (not surprising since both are based on the same underlying concepts).
 

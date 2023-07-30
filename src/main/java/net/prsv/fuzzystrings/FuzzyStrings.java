@@ -245,7 +245,9 @@ public class FuzzyStrings {
      * Returns the best match for the specified string from a collection of candidates.
      * @param s a string to match against the collection of candidates
      * @param candidates a collection of strings to be matched against {@code s}
-     * @param compareFunction it is possible to use {@code FuzzyStrings::ratio}, {@code FuzzyStrings::ratioToken},
+     * @param compareFunction a compare function compatible with the {@link StringCompareFunction} functional interface.
+     *                       {@code FuzzyStrings} provides four methods that can be passed to {@code matchOne()} and
+     *                       {@code matchAndSort()} methods: {@code FuzzyStrings::ratio}, {@code FuzzyStrings::ratioToken},
      *                        {@code FuzzyStrings::ratioTokenSet} and {@code FuzzyStrings::complexRatio} as
      *                        {@code compareFunction}
      * @param ignoreCase if {@code true}, the method will ignore differences in case between the two strings
@@ -269,7 +271,9 @@ public class FuzzyStrings {
      * Scores all strings in a collection and returns a list of matches sorted by score (in descending order).
      * @param s a string to match against the collection of candidates
      * @param candidates a collection of strings to be matched against {@code s}
-     * @param compareFunction it is possible to use {@code FuzzyStrings::ratio}, {@code FuzzyStrings::ratioToken},
+     * @param compareFunction a compare function compatible with the {@link StringCompareFunction} functional interface.
+     *                       {@code FuzzyStrings} provides four methods that can be passed to {@code matchOne()} and
+     *                       {@code matchAndSort()}: {@code FuzzyStrings::ratio}, {@code FuzzyStrings::ratioToken},
      *                        {@code FuzzyStrings::ratioTokenSet} and {@code FuzzyStrings::complexRatio} as
      *                        {@code compareFunction}
      * @param ignoreCase if {@code true}, the method will ignore differences in case between the two strings

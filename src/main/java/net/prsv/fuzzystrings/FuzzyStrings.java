@@ -9,13 +9,23 @@ package net.prsv.fuzzystrings;
 import java.util.*;
 import java.util.regex.Pattern;
 
+/**
+ * This class implements fuzzy string matching using <a href="https://en.wikipedia.org/wiki/Levenshtein_distance">Levenshtein distance</a>.
+ * @author Pavel Urusov
+ */
 public class FuzzyStrings {
 
     // do not instantiate
     private FuzzyStrings() {
     }
 
-    // prepares s for further processing
+    /**
+     * Prepares the specified {@link String} for future processing.
+     * @param s the {@code String} to be processed
+     * @param toLowerCase if {@code true}, the specified string will be converted to lowercase
+     * @param removePunctuation if {@code true}, the method will strip punctuation from the return value
+     * @return the prepared string
+     */
     private static String prepare(String s, boolean toLowerCase, boolean removePunctuation) {
         String result = s;
         if (removePunctuation) {
@@ -29,12 +39,24 @@ public class FuzzyStrings {
         return result;
     }
 
-    // checks s for validity
+
+    /**
+     * Checks the specified {@link String} for validity. Returns {@code false} if the string is invalid, that is,
+     * if the string is {@code null} or if it contains only whitespace characters.
+     * @param s a string to be checked
+     * @return {@code true} if the specified string is valid, {@code false} otherwise
+     */
     private static boolean isInvalid(String s) {
         return (s == null || s.strip().length() == 0);
     }
 
-    // returns the Levenshtein distance between strings s1 and s2
+    /**
+     * Returns the <a href="https://en.wikipedia.org/wiki/Levenshtein_distance">Levenshtein distance</a> between the
+     * specified strings.
+     * @param s1 a string to be compared with {@code s2}
+     * @param s2 a string to be compared with {@code s1}
+     * @return Levenshtein distance between the two strings
+     */
     private static int levenshtein(String s1, String s2) {
         int rowLength = s1.length() + 1;
         int columnHeight = s2.length() + 1;
@@ -66,8 +88,12 @@ public class FuzzyStrings {
         return distance[rowLength - 1][columnHeight - 1];
     }
 
-    // similar to levenshtein() but based on tokens instead of individual characters.
-    // a token is an uninterrupted sequence of word characters (\w in regex parlance)
+    /** Similar to {@link #levenshtein(String, String)} but based on tokens instead of individual characters.
+     * A token is an uninterrupted sequence of word characters ({@code \w} in regex parlance).
+     * @param tokens1 an array of tokens to compare with {@code tokens2}
+     * @param tokens2 an array of tokens to compare with {@code tokens1}
+     * @return distance between {@code tokens1} and {@code tokens2}
+     */
     private static int levenshteinToken(String[] tokens1, String[] tokens2) {
         int rowLength = tokens1.length + 1;
         int columnHeight = tokens2.length + 1;
@@ -99,10 +125,21 @@ public class FuzzyStrings {
         return distance[rowLength - 1][columnHeight - 1];
     }
 
-    // returns similarity between s1 and s2 based on levenshtein(s1, s2)
+    /**
+     * Returns similarity between {@code s1} and {@code s2} based on the Levenshtein distance between them.
+     * @param s1 a string to be compared to {@code s2}
+     * @param s2 a string to be compared to {@code s1}
+     * @param ignoreCase if {@code true}, the method will ignore differences in case between the two strings
+     * @return similarity between the two strings on the scale from 0 to 100
+     *         (a value of 100 means that the strings are, in fact, equal)
+     */
     public static int ratio(String s1, String s2, boolean ignoreCase) {
         if (isInvalid(s1) || isInvalid(s2)) {
             throw new IllegalArgumentException("String is null, empty, or contains only whitespace characters.");
+        }
+        // convenient shortcut if the strings are, in fact, equal
+        if (s1.equals(s2)) {
+            return 100;
         }
         String str1 = prepare(s1, ignoreCase, false);
         String str2 = prepare(s2, ignoreCase, false);
@@ -112,12 +149,21 @@ public class FuzzyStrings {
     }
 
 
+    /**
+     * Equivalent to calling {@code ratio(s1, s2, false)}.
+     */
     public static int ratio(String s1, String s2) {
         return ratio(s1, s2, false);
     }
 
-    // returns similarity between s1 and s2 based on levenshteinToken()
-    // returns -1 if both s1 and s2 do not contain any tokens
+    /**
+     * Returns similarity between s1 and s2 based on {@link #levenshteinToken(String[], String[])}.
+     * The method will return {@code -1} if both s1 and s2 do not contain any tokens.
+     * @param s1 a string to be compared with {@code s2}
+     * @param s2 a string to be compared with {@code s1}
+     * @param ignoreCase if {@code true}, the method will ignore differences in case between the two strings
+     * @return similarity between the two strings on the scale from 0 to 100
+     */
     public static int ratioToken(String s1, String s2, boolean ignoreCase) {
         if (isInvalid(s1) || isInvalid(s2)) {
             throw new IllegalArgumentException("String is null, empty, or contains only whitespace characters.");
@@ -132,12 +178,21 @@ public class FuzzyStrings {
         return Math.round(ratio*100);
     }
 
+    /**
+     * Equivalent to calling {@code ratioToken(s1, s2, false)}
+     */
     public static int ratioToken(String s1, String s2) {
         return ratioToken(s1, s2, false);
     }
 
-    // returns similarity between s1 and s2 based on the sets of tokens in s1 and s2
-    // returns -1 if both s1 and s2 do not contain any tokens
+    /**
+     * Returns similarity between s1 and s2 based on the sets of tokens in {@code s1} and {@code s2}.
+     * Returns -1 if both s1 and s2 do not contain any tokens.
+     * @param s1 a string to be compared with {@code s2}
+     * @param s2 a string to be compared with {@code s1}
+     * @param ignoreCase if {@code true}, the method will ignore differences in case between the two strings
+     * @return similarity between the two strings on the scale from 0 to 100
+     */
     public static int ratioTokenSet(String s1, String s2, boolean ignoreCase) {
         if (isInvalid(s1) || isInvalid(s2)) {
             throw new IllegalArgumentException("String is null, empty, or contains only whitespace characters.");
@@ -159,12 +214,26 @@ public class FuzzyStrings {
         return Math.round(ratio * 100);
     }
 
+    /**
+     * Equivalent to calling {@code ratioTokenSet(s1, s2, false)}.
+     */
     public static int ratioTokenSet(String s1, String s2) {
         return ratioTokenSet(s1, s2, false);
     }
 
+    /**
+     * Returns similarity between {@code s1} and {@code s2} based on {@link #ratio(String, String, boolean)}},
+     * {@link #ratioToken(String, String, boolean)} and {@link #ratioTokenSet(String, String, boolean)}.
+     * @param s1 string to be compared with {@code s2}
+     * @param s2 string to be compared with {@code s1}
+     * @param ignoreCase if {@code true}, the method will ignore differences in case between the two strings
+     * @return similarity between the two strings on the scale from 0 to 100
+     */
     // returns similarity between s1 and s2 based on ratio(), ratioToken() and ratioTokenSet()
     public static int complexRatio(String s1, String s2, boolean ignoreCase) {
+        if (s1.equals(s2)) {
+            return 100;
+        }
         int simpleRatio = ratio(s1, s2, ignoreCase);
         int tokenRatio = ratioToken(s1, s2, ignoreCase);
         int tokenSetRatio = ratioTokenSet(s1, s2, ignoreCase);
@@ -172,9 +241,16 @@ public class FuzzyStrings {
         return Math.round(cRatio);
     }
 
-    // returns the best match from a collection of strings
-    // you can use FuzzyStrings::ratio, FuzzyStrings::ratioToken, FuzzyStrings::ratioTokenSet and
-    // FuzzyStrings::complexRatio as compareFunction
+    /**
+     * Returns the best match for the specified string from a collection of candidates.
+     * @param s a string to match against the collection of candidates
+     * @param candidates a collection of strings to be matched against {@code s}
+     * @param compareFunction it is possible to use {@code FuzzyStrings::ratio}, {@code FuzzyStrings::ratioToken},
+     *                        {@code FuzzyStrings::ratioTokenSet} and {@code FuzzyStrings::complexRatio} as
+     *                        {@code compareFunction}
+     * @param ignoreCase if {@code true}, the method will ignore differences in case between the two strings
+     * @return the best match for the specified string from a collection of candidates
+     */
     public static StringMatch matchOne(String s, Collection<String> candidates,
                                        StringCompareFunction compareFunction, boolean ignoreCase) {
         int bestRatio = -1;
@@ -189,9 +265,16 @@ public class FuzzyStrings {
         return new StringMatch(bestRatio, matchedString);
     }
 
-    // scores all strings in a collection and returns matches sorted by score (in descending order)
-    // you can use FuzzyStrings::ratio, FuzzyStrings::ratioToken, FuzzyStrings::ratioTokenSet and
-    // FuzzyStrings::complexRatio as compareFunction
+    /**
+     * Scores all strings in a collection and returns a list of matches sorted by score (in descending order).
+     * @param s a string to match against the collection of candidates
+     * @param candidates a collection of strings to be matched against {@code s}
+     * @param compareFunction it is possible to use {@code FuzzyStrings::ratio}, {@code FuzzyStrings::ratioToken},
+     *                        {@code FuzzyStrings::ratioTokenSet} and {@code FuzzyStrings::complexRatio} as
+     *                        {@code compareFunction}
+     * @param ignoreCase if {@code true}, the method will ignore differences in case between the two strings
+     * @return a {@link List} of {@link StringMatch} objects sorted by their score
+     */
     public static List<StringMatch> matchAndSort(String s, Collection<String> candidates,
                                                  StringCompareFunction compareFunction, boolean ignoreCase) {
         List<StringMatch> results = new ArrayList<>();

@@ -6,21 +6,36 @@ See LICENSE for details.
 
 package net.prsv.fuzzystrings;
 
-// This simple class is used kinda like a C struct. It has two fields:
-// score and text, and it implements the Comparable interface to enable sorting.
+/**
+ * This simple class is basically used like a record that holds a string match. It has two fields:
+ * {@code score} and {@code text}, and it implements {@link Comparable} to enable sorting.
+ */
 public class StringMatch implements Comparable<StringMatch> {
     private final int score;
     private final String text;
 
+    /**
+     * The sole constructor.
+     * @param score the score
+     * @param text the text
+     */
     public StringMatch(int score, String text) {
         this.score = score;
         this.text = text;
     }
 
+    /**
+     * Returns the score.
+     * @return the score
+     */
     public int getScore() {
         return score;
     }
 
+    /**
+     * Returns the text.
+     * @return the text
+     */
     public String getText() {
         return text;
     }

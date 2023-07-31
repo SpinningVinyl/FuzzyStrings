@@ -8,11 +8,35 @@
     <artifactId>FuzzyStrings</artifactId>
     <version>1.0</version>
 
+    <name>FuzzyStrings</name>
+    <description>A small package for fuzzy string matching in Java.</description>
+    <url>https://github.com/SpinningVinyl/FuzzyStrings</url>
+
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <maven.compiler.release>11</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Pavel Urusov</name>
+            <email>pavel.urusov@gmail.com</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/SpinningVinyl/FuzzyStrings.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:SpinningVinyl/FuzzyStrings.git</developerConnection>
+        <url>https://github.com/SpinningVinyl/FuzzyStrings</url>
+    </scm>
     
 </project>

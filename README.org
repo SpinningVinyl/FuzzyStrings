@@ -2,7 +2,7 @@
 
 A small Java package for simple string matching. It was born when I needed something similar to [[https://github.com/seatgeek/thefuzz][The Fuzz]], but for Java.
 
-In my testing, the results it produces are extremely similar to results produced by The Fuzz (not surprising since both are based on the same underlying concepts).
+In my testing, the results it produces are extremely similar to results produced by The Fuzz (not surprising since both are based on the same underlying concepts). It also performed extremely well compared to the matcher built into a popular CAT software package.
 
 ** Features
 

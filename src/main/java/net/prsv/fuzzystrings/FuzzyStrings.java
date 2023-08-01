@@ -132,6 +132,7 @@ public class FuzzyStrings {
      * @param ignoreCase if {@code true}, the method will ignore differences in case between the two strings
      * @return similarity between the two strings on the scale from 0 to 100
      *         (a value of 100 means that the strings are, in fact, equal)
+     * @throws IllegalArgumentException if {@code (isInvalid(s1) == true || isInvalid(s2) == true)}
      */
     public static int ratio(String s1, String s2, boolean ignoreCase) {
         if (isInvalid(s1) || isInvalid(s2)) {
@@ -163,6 +164,7 @@ public class FuzzyStrings {
      * @param s2 a string to be compared with {@code s1}
      * @param ignoreCase if {@code true}, the method will ignore differences in case between the two strings
      * @return similarity between the two strings on the scale from 0 to 100
+     * @throws IllegalArgumentException if {@code (isInvalid(s1) == true || isInvalid(s2) == true)}
      */
     public static int ratioToken(String s1, String s2, boolean ignoreCase) {
         if (isInvalid(s1) || isInvalid(s2)) {
@@ -192,6 +194,7 @@ public class FuzzyStrings {
      * @param s2 a string to be compared with {@code s1}
      * @param ignoreCase if {@code true}, the method will ignore differences in case between the two strings
      * @return similarity between the two strings on the scale from 0 to 100
+     * @throws IllegalArgumentException if {@code (isInvalid(s1) == true || isInvalid(s2) == true)}
      */
     public static int ratioTokenSet(String s1, String s2, boolean ignoreCase) {
         if (isInvalid(s1) || isInvalid(s2)) {

@@ -225,12 +225,13 @@ public class FuzzyStrings {
     }
 
     /**
-     * Returns similarity between {@code s1} and {@code s2} based on {@link #ratio(String, String, boolean)}},
+     * Returns similarity between {@code s1} and {@code s2} based on {@link #ratio(String, String, boolean)},
      * {@link #ratioToken(String, String, boolean)} and {@link #ratioTokenSet(String, String, boolean)}.
      * @param s1 string to be compared with {@code s2}
      * @param s2 string to be compared with {@code s1}
      * @param ignoreCase if {@code true}, the method will ignore differences in case between the two strings
      * @return similarity between the two strings on the scale from 0 to 100
+     * @throws IllegalArgumentException if {@code (isInvalid(s1) == true || isInvalid(s2) == true)}
      */
     // returns similarity between s1 and s2 based on ratio(), ratioToken() and ratioTokenSet()
     public static int complexRatio(String s1, String s2, boolean ignoreCase) {

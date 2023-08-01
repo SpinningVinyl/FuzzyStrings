@@ -1,5 +1,4 @@
-package net.prsv.fuzzystrings;
-
+import net.prsv.fuzzystrings.*;
 import java.util.ArrayList;
 import java.util.List;
 
